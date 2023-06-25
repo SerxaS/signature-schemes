@@ -1,12 +1,10 @@
-use halo2curves::bn256::{G1, G2, Fr};
-use halo2curves::bn256::pairing;
-use halo2curves::ff::{Field, PrimeField};
+use halo2curves::bn256::{G1, G2, Fr, pairing};
+use halo2curves::ff::{Field, PrimeField, FromUniformBytes};
 use halo2curves::group::Curve;
+use rand::thread_rng;
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
 use std::ops::{Mul, Add};
-use rand::thread_rng;
-use halo2curves::ff::FromUniformBytes;
 
 fn main() {
     //G1 from Curve_1 moved into Curve_1's Fr

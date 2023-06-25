@@ -1,11 +1,10 @@
-
 use halo2curves::bn256::{G1, Fr};
 use halo2curves::ff::{Field, PrimeField};
 use halo2curves::group::Curve;
+use rand::thread_rng;
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
 use std::ops::{Mul, Add};
-use rand::thread_rng;
 
 fn main() {
     //changing type of G1 to Fr

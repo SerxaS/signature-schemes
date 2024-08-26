@@ -6,6 +6,7 @@ mod test {
         schnorr_musig::{sch_musig_verify, SchMuSig},
         schnorr_single::{sch_verify, SchSign},
     };
+    
     use halo2::halo2curves::{bn256::Fr, ff::Field};
     use rand::thread_rng;
 

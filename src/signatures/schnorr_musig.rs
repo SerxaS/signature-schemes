@@ -78,10 +78,11 @@ pub fn sch_musig_verify(alice_msg: Fr, bob_msg: Fr, signature: SchMuSig) {
     let bob_rnd_a = Fr::random(rng.clone());
 
     // Concatenates "r", "pub key" and "message" separately and hashes them.
-    let big_r_alice_fr = Fr::from_bytes(&signature.big_r_alice.x.to_bytes()).unwrap();
-    let big_r_bob_fr = Fr::from_bytes(&signature.big_r_bob.x.to_bytes()).unwrap();
     let alice_pub_fr = Fr::from_bytes(&signature.alice_pub.x.to_bytes()).unwrap();
+    let big_r_alice_fr = Fr::from_bytes(&signature.big_r_alice.x.to_bytes()).unwrap();
+
     let bob_pub_fr = Fr::from_bytes(&signature.bob_pub.x.to_bytes()).unwrap();
+    let big_r_bob_fr = Fr::from_bytes(&signature.big_r_bob.x.to_bytes()).unwrap();
 
     let mut sponge = PoseidonSponge::new();
 

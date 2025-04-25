@@ -7,7 +7,7 @@ use rand::thread_rng;
 
 use crate::poseidon_hash::sponge::PoseidonSponge;
 
-pub struct SchMuSig {
+pub struct SchnorrBatch {
     pub(crate) big_r_alice: G1,
     pub(crate) s_alice: Fr,
     pub(crate) alice_pub: G1,
@@ -16,8 +16,8 @@ pub struct SchMuSig {
     pub(crate) bob_pub: G1,
 }
 
-impl SchMuSig {
-    pub fn signature(alice_msg: Fr, bob_msg: Fr) -> SchMuSig {
+impl SchnorrBatch {
+    pub fn signature(alice_msg: Fr, bob_msg: Fr) -> SchnorrBatch {
         // Random number generator.
         let rng = thread_rng();
 
@@ -58,7 +58,7 @@ impl SchMuSig {
         let s_alice = r_alice + (e_alice * alice_priv);
         let s_bob = r_bob + (e_bob * bob_priv);
 
-        SchMuSig {
+        SchnorrBatch {
             big_r_alice,
             s_alice,
             alice_pub,
@@ -69,7 +69,7 @@ impl SchMuSig {
     }
 }
 
-pub fn sch_musig_verify(alice_msg: Fr, bob_msg: Fr, signature: SchMuSig) {
+pub fn schnorr_batch_verify(alice_msg: Fr, bob_msg: Fr, signature: SchnorrBatch) -> bool {
     // Random number generator.
     let rng = thread_rng();
 
@@ -93,13 +93,10 @@ pub fn sch_musig_verify(alice_msg: Fr, bob_msg: Fr, signature: SchMuSig) {
     let e_v_bob = PoseidonSponge::squeeze(&mut sponge);
 
     // Verifies that the equation holds.
-    if G1::generator() * (alice_rnd_a * signature.s_alice + bob_rnd_a * signature.s_bob)
-        == ((signature.alice_pub * alice_rnd_a * e_v_alice)
-            + (signature.bob_pub * bob_rnd_a * e_v_bob))
-            + (signature.big_r_alice * alice_rnd_a + signature.big_r_bob * bob_rnd_a)
-    {
-        println!("Signature matches. They signed the message.")
-    } else {
-        println!("Invalid Signature!")
-    }
+    let lhs = G1::generator() * (alice_rnd_a * signature.s_alice + bob_rnd_a * signature.s_bob);
+    let rhs = ((signature.alice_pub * alice_rnd_a * e_v_alice)
+        + (signature.bob_pub * bob_rnd_a * e_v_bob))
+        + (signature.big_r_alice * alice_rnd_a + signature.big_r_bob * bob_rnd_a);
+
+    lhs == rhs
 }
